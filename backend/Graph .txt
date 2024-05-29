@@ -1,0 +1,556 @@
+Base case must have been reached 
+magic number should be defined early for readiness
+
+827: making a larger island.	
+    the map will be used to keep track of each island area marked by a unqiue identifier starting from 2 since 0 and 1 
+    have already used in the grid.
+    First Pass-Island Marking and Area calculation 
+    Iterate through each cell in the grid. When a cell with value '1' is found, perform dfs starting from that cell. During thr 
+    Depth-First search mark all connected '1' with the unqiue identifier and count the area of this island. store the area of the
+    island with the identifier as the key. Keep track of the largest island area.
+    Second Pass- Check for zero cells to form a larger island
+    Iterate through the grid again.This time, looking for the cell with the value 0.
+    For each value 0, check its all adjacent cells in four directions and calculate the potential area od th eisland if this 0 is turned in to 
+    1.
+    To avoid counting repeatedly an adjacent island. Use a HashSet to keep track of the island identifier 
+
+1791： Find Center of Star Graph 
+    We make an assumption that the return value( the center of the graph) must be one of nodes in the first edge. 
+    The helper method takes the same edges array and integer n as the potential center node to  be checked 
+    It iterates over the edges array. For each edge, check if each edge contain the center node n. (If n is not euqal to egde[0] or edge[1], it means 
+    n is not one of the nodes in this edge. Hence it cannot be the center of the graph.
+
+797: All paths from source to Target
+    The graph is represented as adjacency list, where graph[i] represents all nodes that node i is connected to by a direct edge. 
+    Initalization: The adjacency list of the Directed Acyclic graph. res is a list to store all successful path from source to taget
+    cur is a temporary list that keeps track of the current path that starts from the source node.
+    The backtracking method is a recursive method that takes the current path cur and the current node i
+    The base case: when the current node equal to the target node, which means the current path has reached the target node. Then the method makes a deep copy of the 
+    current path list to the 'res' as one of the successful paths.
+    Recursion: For each node to the current node(graph[i]), the method adds the node to the current path. and calls the function itself with undated oath and the new node. 
+    After exploring all pathes from the current node, it backtraks by removing the last node form the temporary list. The step allows next possible candidate to explore different paths after returning from the resursive call 
+
+    (Backtracking is an algorithm that incrementally builds the candidates to the solution and abondons that candidates as soon as  the current candidate cannot lead to a valid solution 
+    any more.It starts a new exploration. It is generally used in solving combination 
+
+1557 Minimum Number of vertices to reach All Nodes
+    Initliztion HashSet set is used to store all vertices that are destinations of one edges.
+    res is used to store the vertices that are unreachable (The samllest set of vertices that all other vertices can be reached)
+    Iterates the edges first add all the destination node to the set 
+    Iterates the edges second, for each source vertex, check if it is in the destination list. if it is not contained in the list, it means that it does not have an incoming edges
+    add it to the res set
+
+841 Keys and Rooms 
+    (If we want to check if all the nodes can be visisted, its better to use array where the each room has an unqiue identifier. An array can allow to direct access to visitation through the node identifier)
+    Using queue to conduct a brath first search. While there is a node that in the queue we check if we have visisted it before. If not, we offer all nodes adjacent to it to the queue and marked it as visited. 
+    To conduct a depth first search we can use recursion where the base case relys on whether we have visited the node before.
+
+1971 Find if path exists in Graph 
+    A gragh with an edge list is not efficient for a dfs ot bfs. Converting it to an adjacency list using map.computeIfAbsent. During the dfs or bfs we need an visited array to keep track of the nodes we have visited before
+    to avoid revisiting nodes, which leads to an non-terminting loops.
+    in dfs if return value is boolean, you cannot write the base case as visited ==false. You should use backtracking structurte move the return false to the last place
+    revisited is just used for avoiding revisit the same node. but in other backtracking problem, we need to undo the change 
+
+133 Clone Graph 
+    Use a HashMap to keep track all the cloneNodes
+    We are required to travse all the nodes, and do not revisited all the nodes. But we need to add nodes to a node's adjacent list'
+
+207 Course Schedule
+    Observation: if there is a cycle in the directed graph, we return false;
+    the logic of detecting a cycle in a directed graph:
+    Unlike the visited array where we use boolean (ture or false) to mark which node we have visited before.
+    We use 1 or 2 to mark the node. During exploration, we mark the node as '1' to represent we are currently visiting a node's descendents. 
+    And use 2 to mark a node that we have finished visited the node and all of its descendants. During for(nodes:graph.get) if we find a 1 in this proces which meansthat we are visiting a node 
+    that we are departing from and we are still visiting its descendants. We found a cycle in this case. So we should return true to report a cycle. Only when we visited all nodes and mark all as 2
+    we could say there is no cycle.
+
+210 course schdule 
+    Observation: we have to visit all descendants( upper level course)of a node before outputing the node. we build our final array from back to front. since we want all our upper level class taken before we 
+    after we visit the root node. We cannot pick a random root node and travsel the graph becasue of the case when a course is based on two course before taking.
+    We need to take all descendants of a course before we take that coure. Since we use the rescursive structure for the dfs. we only export the course after we mark the course 2
+    if we meet a'1' we return new int[0] to represent we cannot finish all courses. Since all descendants represents upoer classes we will build our result array from back to font 
+    put all uppering classes before the root node.
+    Our current algorithm is based on this idea. We first process all the nodes/course with 0 in-degree implying no prerequisite courses
+    required. If we remove all these courses from the graph, along with their outgoing edges, we can find out the courses/nodes that should be processed next. These would again be the nodes with 0 in-degree. We can continuously do this until all the courses have been accounted for.
+
+
+Solution 2:
+    Topological sorting: 
+    mark each node value as indegree. use an indegree array to keep track of how many incoming (dependency node) a node contains. 
+    Conduct breadth first search only on 0 indegree node since those node have no desendant. 
+    Use a queue to conduct bfs. once a node is polled/ visited the queue. we subtract all its neighbor nodes by on degree which meaning we delete the edge. Then we offer nodes that have 0 indegree
+    use an integer to keep track of how many nodes have been visited. if not all nodes can be visited, it means there is cycle inside the graph 
+
+261: Graph Valid Tree
+    Observation: A graph can be defined as a tree if the graoh can staisfy two requirements
+    1.all nodes can be visited through by tracing from a random node.
+    2.there is no cycle in the graph.
+    Use a visited array to keep track of the nodes that have been visited. during the dps we cannot return to visiting our parent node, which requires an extra argument in the method.
+    return true if we have visited a node twice or more.
+
+277: Find the Celebrity
+    if we check whether is someone is a celebrity, it will cost O(n). Therefore, Linearly scan the array and check if the one is a celebrity cost O(N^2)
+    Algorithm, we pick a random person as our candidate, we simply iterate over (knows(i,j)==true i is not candidate, and j is potentially candidate 
+    knows(i,j) ==false i is potentailly candidate, and we can eliminate i's possiblity to be a candidate. So iterate over 0->n if knows(candidate,i) is true, candidate should be changed to i
+    if knows(candidate,i) equals false we can elimiante i. keep the candidate. 
+
+310 Minimun Height Trees 
+    Observation:imgaine the graph presented layer by layer, where each layer of nodes only depends on the outer larger nodes. 
+    If we trace from the outer to inner, we will reach the center node. There would only be 2 conditions in case of the number of center nodes 
+    either 1 or 2. Based on that, we can perform BFS search on all out layers node. and search inward towards center.
+    Algorithm: Convert edge list to adjacenvy list, and use indegree array to keep track of the dependency of the vertices.
+    Push all nodes with 1 indegree into the queue. while(nodesLeft>2) we do a laryer of trimming. 
+    poll all nodes from the queue. Scan all its neighbor to subtract by 1 degree counting for deleting nodes. enqueue any node with remaining 
+    one degree into the queue. Degree array will function as a visited array
+
+323 Number of Connected Components in an Undirected Graph
+    Observation:use dfs or bfs can visited all nodes in an connected component. 
+    Algorithm: convert edge list into adjacency list. Using a visited array to perform dfs on each node from 0to n-1;
+    return the number of dfs triggered.
+
+399 Evaluate Division
+    static class Pair<U,V> {
+        public U first;
+        public V second;
+    public Pair(U first, V second){
+        this.first=first;
+        this.second=second;
+    }	
+    }	Weighted graph <Integer,List<Pair<Integer,Double>>
+
+444 Sequence Reconstruction 
+    Observation: Treat sequences as the edges list to constucst the graph. Check if the nums is the only one topological order of the graph.
+    Algorithm: Convert sequences list to adjacents list and construst the indegree array at the same time. 
+    We can choose map or list and remember to check the index range of the problem.
+    initalize the graph with the given numbers of new ArrayList<>();
+    When check if it is the only topological path, always check if the q size is equal to one and --indegree[neighbor]==0
+
+505 MazeII
+    Observation: perform either BFS or DFS from the source position until we hit the target position.
+    Instead of using visited array as base case, we are required to calculate the shortest path. Using a distance 2-D array to store the shortest stpes to reach certain entry.
+    Then the base case should become if curSteps is larger than distance[x][y] which means the current path takes longer than previous approach. 
+    Direction array int[][] direction= {} for (int[] d:direction} 
+    Use a count variable to store the steps to take and update in dfs's argument.
+    BFS you decide whether enqueue the element based on whether it would generate a smaller path.
+    dont forget initlalize the distance arrat with max integer value;
+
+1059 All Paths from Source to Destination 
+    Observation:1 the destinatin node must have no outgoing edge.
+    2 All path should lead to destination.
+    3. there should beno cycle in the graph( there should be a technique in the algorithm that can check if there is a cycle in the graph) 
+    use a array to mark the ability to lead to the destination . intialize the array with 0 other than destination (2).
+    mark all the visiting node as 1. if we find all its descendant nodes will lead to destination, we will mark it as 2 and return true;
+    if there is no descendant nodes and the node is not the target node return false;
+    if detect a cycle ( we must detect sicne if not, each node will depend on the other node which runs into overflow stack) so we have to add a 1 as  visiting label
+
+684 Redundant Connection 
+    Detect cycle in an undirected graph
+    Union Find : also known as disjoint set union algorithm is a data structure that keep tracks of elements which are partitioned into a number of disjoint sets .:
+    find: to find which set a pariticular element belongs to. Path compression: To improve eifficiency, we faltten the structure of the tree by directkly linking every node to its root whenever the find is used 
+    Union: is to used to union two sets, 
+    find(x){
+    if(x==find[x]) return x;
+    return root[x]=find(root[x]);
+
+    union(int x, int y){
+    int rootX=root[x];
+    int rootY=root[y];
+    if(rootX!=rootY){
+    root[y]=rootX;}
+    }
+
+    isConnected(int x,inty){
+    return find(x)==find(y);
+
+    the time complexity would be m a(n) m operations using find union n number of elements
+
+743 NetWork Delay Time
+    dfs the base case would be the time>= than shortest time stored util now
+    dijkstra Algorithm: 
+    Key Concepts: Single source shortest path. the algorithm finds all shortest path from a single source to all other nodes in the graph 
+    Non-Negative Weights:The Algorithm only works for non-negative weight edges 
+    Greedy Method:At each step, it makes logically optimal choose by picking shortest univisited node, thus it fails under the category of greedy algorithm.
+    Initialization: assign a tentative distance value to every node: all set to inifinite, set set the source node as 0 which the distance we start with is 0 
+    For the current node, we calculate all its univisited neighbor nodes's tentative distance through the current node. Once we consider all of the unvisited neighbor of the current nodes, we mark the current node as visited and from it from the unvisited set. 
+    Selected the unvisited node that is marked with the smallest tentative distance set as new current node and go back to step 2.
+    Analysis: By selecting the nearest node from the source as our first candidiate to visite, we can immediately finilize its shortest distance. Since all other path would go through ither unvisited nodes, which definaitedly has a longer length. It will avoid the need fot revisiting the same node which enhance the time cost 
+    Time complexity: The maximun number of nodes in the priortity queue logn, there are going to be V times of dequeue to extract a node from the queue which cost vlogv. Also we have to consider all the edge that costs logv in the worst case to enqueue. 
+    So overall time complexity will be (V+E)LOGV
+    Queue<Pair> pq = new PriorityQueue<>((a-b)->a.second-b.second);
+
+    class pair{
+    int int} 
+    class Solution {
+
+            while(!pq.isEmpty()){
+                Pair cur=pq.poll();
+                if(min[cur.target]!=Integer.MAX_VALUE) continue;
+                min[cur.target]=cur.cost;
+                if(graph.containsKey(cur.target)){
+                    for(Pair neighbor:graph.get(cur.target)){
+                        int c=cur.cost +neighbor.cost;
+                        int node= neighbor.target;
+                        if(min[node]==Integer.MAX_VALUE) 
+                        {
+                            pq.offer(new Pair(node,c));
+                        }
+                    }
+                }
+            }
+            if(min[
+
+785 Is Graph Bipartite
+    If we greedily label the node during a dfs or bfs.
+    We start by coloring a root node as blue, and color all its neighbor as the opposite color red greedily. At the end, we should be able to color all nodes in the graph/
+    During each iteration, we should check for conflicts if neighbor node has alreadlt been colored. If the neighbor and current node are colored by the same. 
+    We should return false; which means the graph is not barphite. 
+    Since we iterate over all the visited node, and perform dfs. We should be able to visite all nodes and all edges. This approach will check all edge if they are qualified for being a componnet of a barpitite
+
+    In order to determine if a grpah is a bipartite, we can employ a greedy color approach. We initiate the process by picking a univisted node, and color it blue. Then, we color all its neighor red, the opposite color, adhering to the greedy 
+    approach This means that for every node we visite, we color it in a way that is opposite to tis parent node, ensuring two adjacnet nodes has two difference color
+    During the process, we keep checking for conflicy. Specifically, we have encounter a node that has already been colored, we should check if the node has the same color as the parent node. if yes, it indicates a conflict.
+    To throughly explore the graph, we can confirm we can visite all nodes and all edges in the grapg. it is crucial because it allows to us to check every edge's compatibility with the requirement of being a graph. Throughout the process, if 
+    we manage to color all nodes without meeting a conflict, i
+
+787 Cheapest Flight Within K Stops 
+    Since Dijkstra Algorithm will always access the nearest node from the source in each iteration. Once we meet the destination node, we can confirm that the curCost is minimum.
+    Therefore, we can get rid of minCost array. when accessing the neighbor nodes, the typical approach would be offer the node with a less cost than the current minimum cost so far.
+    But this problem, we need offer the neighbor node that costs more while taking less steps. Therefore, we are going to use a steps array to keep tracks of the minimun steps take to a node so far.
+    We cannot think of steps in a greedy approach. Since the priority queue is sorted by the cost. 
+    We should consider a node that wither take less steps or less cost. The priority queue can guarantee we first meet the minmun cost path.
+    The second time we consider the same node, we want to enqueue it if it has less steps than the previous less cost one. We update the min steps when we dequeue it, since the priority queu is sorted by the cost. 
+    If you enqueue a minsetp one, you will not read it by the next round.
+    We only update the least steps array cause the queue ordering is based on the cost.
+    Using Priority Queue we only update the cost or stops array if we dequeue an element (marks as we visited) 
+
+797 All Paths From Source to target
+    Backtracking is an algorithm where we build the solution elment by elment,once we have determined that the current path cannot form avalid  solution any more, we backtrack, abandon the current candidate.
+    How Backtracking work: stary by choosing all availabl options at the current step. Check if the current candidate meet the problem's constrain.if SO, PROCEED IF NOT, gp back.
+    Since when we explore all paths from the source to target. At each step, we need to explore every potentially path. It perfectly fits the backtrakcing algorith,
+
+802 Find Eventual Safe States 
+    Observatin: if a node has a path to a cycle, it should be marked as unsafed, since it one of its path does not lead to terminal node. 
+    Use dfs to detect cycle and explore all nodes connected to the root node.
+    Mark all the node that we are visited its descendant as 1. 
+    Mark all nodes that we have finished exploring its children nodes as 2. if no cycle detected.
+    All nodes mark are set to 0 initially. 
+    If any child nodes detect a cycle, we will return false to indicate the current node is not safe since the childnode   cannot noe lead to a terminal node 
+    if all the children nodes are explored without encounter any cycle or unsafe path. the current node is marked as safe 
+
+851 Loud and Rich
+    We construct the graph in a way that people points to richer people, since we can traverse directly to all richer people without backtracking to search through pooer nodes. 
+    We will start from a node and then search the least quiest person among all richer people including himself.
+    we can use a array to memorization where entry keep track of the least quiest pesrion that richer than him 
+    Iterate over the node and perform dfs to populate the memorization array 
+
+    in solving the LOud and Rich problem, we construst the graph in a way that each node points to a richer people. The graph strucure ensures that we can directly traverse all people richer than the root node without backtracking or navigate poorer nodes, thereby optimizing the proces.
+    The object is to identify the least quite person among all individuals richer than peron. To efficiently achieve, we employ memorizatin, using an array where each index correspondings to a person and stores the index of the least quiet. 
+    We initialize the array with defailt values indicating that no computation has been done for the node. Then we iterate over the each node in the graph. and perform 
+    dfs from that node. During the dfs, we update memorization arrat by comparing all descendant nodes from the root node. This approach ensures that once the node has been processed once, any subsequent searches that include the node will sk, which reduces  redundant computation 
+
+886 Possible Bipartition 
+    Treat the graph as undirected graph instead of directed graph.
+
+947 Most Stones Removed with Same Row or Column.
+    Since there is no given grid to perform 2D array operation, it is better to assume the given grid is large.
+    Convert stones to two edge list, where each stone can be explored in two sets of connections on is in vertival direction one is horizotal direction 
+    we use k as differention factor to when row->row egde list col+k-> col edge list
+    Also use a visited HashSet to keep track of which stone we have visted before. Use row+col*k as the key in the hashset k as index modifer;\
+
+    HashMap stores a list of stones that appears at the same row or same col. A unique key k is used to different keys to ensure that rows and cols dont overlap /
+    HashSet visited keeps track of the stones that we visited before, where we use row+k*col as the stone's identifier.
+    We are going to use removestone to populate our hashMap with stone's position. Each stone's row and col are treated as separate key, andthey are added to the corresponding list twice, becasue the map stors stones based on their rows and columns.
+    We are going to iterate over the stones and perform dfs on each unviisted stones, added to them to the visited set. The dfs method will return the number of stones that are connected to the root stone. 
+    The dfs method has a recursive sttucture and cur is an unique identifier for each stone created by row+k*col/
+
+990 Satisfiability of Equality Equations 
+    UnionFind is an algorithm to keep tracks of a set of elements that is partitioned into a number of disjoint groups.
+    Initially, all elements are seen as disconnected to each other. Therefore, for!= is true;
+    Algorithm.Prepocessing the equations to ensure all euqal relationship are builded for unionfind structure. 
+    Then iterates over the equations agagin to check inequality . If any of the inequality euqation vialoate the connectivity built already. return false;
+    If we manage to check all inequality among the equations return true
+    Unionfind char -'a' and the size of array should be 26
+
+1135 Connecting Cities With MiniMum Cost;
+    Prim's Algorithm is a greedy approach that finds the minimum cost to explore all nodes in a weighted undirected graph.
+    It finds asubset of the edges that forms a tree that include every vertex, where the total weight of all the edges in the tree is minimized. 
+    MST starts empty and grw until includes all vertices
+    Selevt arbritary vertex to start the tree. 
+    Set the key value of all vertices to infinity to represent all vertices have not visited and not reachable.
+    while(all vertices are not included){choose a vertx not in the MST that has minimun key value 
+    add u to MST/ fOR EACH VERTEX that is not in the MSET is connected to u update the key 
+
+    Kruskal Algorithm:
+    Kruskal algorithm is used to building MST by sorting all egdes of the graph in aasending order of their weight and then adding them on by one to the MST. provided taht they dont form a cycle
+
+1136 Parallel Courses:
+    Graph Representation: The graph is represented using HashMap where each key-value pait represents a course and alll its descendant course which depends on the source courses
+    Indegree Array: keep tracks of the number of incoming edges for each certex. 
+    For each semster, it iterates trough the queue of currently avaible courses, removing them form the queue and decrementing the indgree value of the descendant course. If the value is decreased to 0, we enqueue that node to the queue.
+    There not all courses can be decremented to 0, which indicates there is a cycle in the graph casue its circular dependency.
+
+1042 Flower Planting Wth No Ajacent
+    First, the graph is constructed using HashMap, where each garden is a key, the list of adjacnet gardens is the value;
+    We will perform dfs from an arbritary root of the garden. if the node has been colored >0 we retur nits color, if the garden is being viisted which indicates  cycle we return -1'
+    With a DFS we use a boolean array to keep track of adjacent color used. we will selected the first unused color to color the current garde n
+    To avoid stackover flow we use -1 to represent we are visiting a garden. 
+
+    A recursive method without cycle detectin will repeatedlt visited the same nodes infinitely. By detecting a cycle we prevent 
+    using bfs if we visited node before keep track of the color 
+    else offer the node to the queue 
+    Then color the node using unused color 
+    
+1245 Tree Diameter
+    Algorithm
+    Convert egdes list to the adjacenvy list to save time complextity 
+    Then we define our dfs method whose input is the root node and ouput is the maximum length from the root node to a descendant leaf node
+    We will travese over the graph. for each node we trasveer we try to upadate the maximum length formed by the current tree cominbined by adding twp longest length to leaf nodes
+    Since any node h
+
+    using DFS to explore the tree and calculate the maximum length from each node to fartherest leaf node. Keep track of the two longest pathes and update the gobal maximum 
+    For each node visited. calculate two maximum length peth to a leaf nodes by recursively calling DFS for nach neighbor.
+    By examing tow longest path at every node,we ensure that every possible path in the tree 
+    Since every node has the potneial to be part of the longest path, so we have to try to caompare all longest path rooted from each node/
+
+1129 Shortest Path with Alternating Colors 
+    First construct two separate adjacency lists using HashMapto representa blue and red egde. Each key represents source node and value represnts the list of destination node if a edge exists
+    res is used to store the shortest length from node 0 to each node. We initlize res[0]=0 represents the zero distance from 0 to 0 and -1 to represnt unreachable node currently 
+    We will use queue to help BFS search where each element in the queue is an array. containing data about the current node, current steps, the last node color/
+    Inside loop we explore the neighbors by using opposite edgelist which ensures we meet the requirement of the problem that we shuld take alternating path/
+    we will upadte the res array if we first visit an node, which the nature of BFS ensures us it is shortest path when we first arrive certain nodes 
+
+    First, check the size of the queue representing the number of nodes at the same distance from root to
+    Iterate over the current layer 
+    the nature of the queue order is to process inner layer to out layer 
+    Besides the regular BFS we only need to keep track of the color of last edge we took 
+
+1361 Valid Binary Tree Nodes 
+    to determine if directed graph is a valid tree, the graph should contain one root,
+    Every node has exacly parent and all nodes are connected. We can visted all nodes from the root, and only meet each node once for a dfs or bfs 
+
+    Algorithm:
+    First, identify the root node which should be a method. Iterates over the leftChild and rightChild array to find a node has no incoming edge no parnt node 
+    Second, perform dfs from the root, and check if  all nodes can be visited exacly once during the tranversal.
+    So reset seen boolean array to keep track of the nodes that have been seen. return false, if we meet a node twice. 
+    Last iterate over the seen array to check if all nodes have been visited 
+
+1514 Path with Maimum Probablity
+    Using Dijkstra Algorithm variant with a priorityQueue to find the maximum probality path form the start node to end node. 
+    The priorityQueue can save time complexity by always choosing highest probablity path first/
+    1.Graph Representation .using HashMap where each key-pair value represents a node maps to a list of pair which contains adjacent nodes identifier and the cost
+    2Traversal wiTh maximum heap: poll the path with highest priority. skip visiting the same node because the queue can ensure the first time we visit a node we always have lowest cost
+    Greedy approach, selecting most promising node to visit nect to the current known distance 
+    Adapt Dijkstra Algoithm to the problem 
+
+2192 
+    All Ancestors of a Node in a Directed Acyclic Graph
+    Using dfs to explore the nodes in the graph. A HashMap Ajacency list where each pair represents the nodes are mapped to the their ajacent ancestors.
+    Use an array of treeset to store the ancestors for each node Since we want to sort in order and efficient retrieval/
+    During the dfs, if we have visited a node, which means we have already update all its ancestors in the set.
+    if no visited, mark as visited. for each neighbor, dfs(neighbor)first since we want a bottom up mechnics visited the neighbor first to make sure all its acestors have been added to its set box.
+    we add each neighbor nodes to the set[cur] and add all ancestors of neighbor nodes to set [cur] make all necessary information have been gathered before we peroform action on the current node 
+
+
+    list.addAll(set/list)
+    new arrayList<>(set)
+
+1319 Number of Operatiins to Make NetWork Connected 
+    We neeed the number of connected components -1 operations to make all nodes to connected.
+    The minimum number egde we need to connect all nodes in the grapg is n-1. 
+    Algorithn count the number of edges if egdes-1<n return false; since we can not connect n nodes withour enough edge 
+    Then iterate over the nodes to do dfs or bfs to count how many connected components we have in the graph. We will increment components by one t omeanthat we have found one new connected component 
+
+    Union and find to find the number of connected components 
+    Iterate over the edge list, and start of the numebr of components as n. 
+    decrement the num of components if adding this egde to the graph dones not form a cycle 
+    if two ends of the egde belong to two disjoint sets
+
+    VE there are V vertex to process at the worst case each vertex is going to enqueue E times of  
+
+1334 Find the City With the Samllest Number of Neighbors at aThreshold Distance
+    iterate over each city and using dijkstra Algorithm to find the number of cities can be reached form the root withough exceeding the distance threshhold 
+    After calculating the number of reachable cities Then compare it to the current minumum update the minimum count and recordes the city as the current baest candidate
+    Since the priblem specifies choosing the city iwth highest index in case of a tie.
+
+1462 Course Schduel 4 
+
+    Perform dfs search and memorization
+    Use an array of set to keep track of all ancestors  for each node. where eac set at index i represents all prerequisties courses for i 
+    Map is an ajacnecy list where each node is mapped to a list a adjacent nodes (prerequisi)
+    boolean visited anarray to keep track whether a node has been visited before during dfs to avoid revisiting.
+
+    Firts initialize set array and visited array/
+    build graph such taht each node represents each course and each egde(a->b) represents that b is a prerequisite of 
+    this recersal is crucial to enable our bottom up approach to find all prerequsite  
+    use dfs seach to explore all ancestors for each node and store all prerequisite course in the set for each node 
+    During the dfs, we taverse the graph staring from each course has a prerequisites. Becasue the graph's edges are reversed, we can directly visit a course's ancestors.
+    As the dfs explore a course's ancestoes,we adds each envountered courses to set at index cur. 
+    our dfs search follow a bottom up approch where once we finish undating the leave node's ancestors list, we move up to their parents nodes, and add the child node and child node's child to the parent node's ancestor list 
+    leaf nodes are processed first which does not require any prerequisite course.
+    After processing a leaf node, the dfs backtrack, then moving up to parent node, add the leaf node to the parent set and all nodes from child node set to the parent set.It enables taht parent noed accumulates a complete list of all ancestors including indrect one
+
+    It is a top down memorization appraoch, where initiate from our heigher level node and work its way down to the base case. The catualy first subprobelms solved is the base case. The first subproblems the algotithm tries to solve is the 
+    node that dfs initiate, bu tit only reaches solution only after exploring and solving the subproblems at the leaf node
+
+1466 Reorder Route to Make All Paths Lead To the City Zero 
+    Observation: the problem implies that the underlying tree structure of the graph, so no matter we perform dfs or bfs search on the root of the tree, we will get the similar tree structure different view 
+    Algorithm: construst the grpah as an undirected graph,perform dfs on the node 0. At each iteration when we process each edge, we will check if the orginal direction of the edge is from child to parent.
+    If it is, it means that we can traverse from the child to the parent which means that we can reach root 0 from the node. Count the number of edgs that need to be reoriented. 
+
+    This problem is based on a graph that inheretly form a tree structure, ensuring that there is exaclt one pah between any two cities. we will perform dfs or bfd from the root 0 since the tree stucute remain constant across different method.
+
+    Graph Represetation: We first treat the graph as undireted graph so that we can explore paths to each nodefrom the root. we first establish the connectivity of the grpah .
+    We will use two HashMap to store the adjacecy list. The first one stors the treats the graph as undirected which helps us to travsal the tree, while the second graph records the original direction of the tree which helps later determine which road need to be reoriented
+    DFS implementation, we peroform dfs from the city zero to explore all paths to all ciites. For each ciity we visited we will examine its neighors, and recusively call dfs method on the unvisited neighbor nodes
+    During the traversal, we keep checking if the orignial edge direction can lead from a child to the parent node. This is determined by check if the parent node is in the set of child node adjacency list(map2) if not
+
+1584 Min Cost to Connect All Points
+    The objective is to connecte all points in a given set so that the total cost of connections is minimized.
+    Calculate distance between all pairs of points in the graph. Then the problem is presented to be graph where each point represents a point and each edge's wight represents the distance of the edge.
+    Algorithm: graph representaion, for each point, connect it to all other points and calculate the egde tentative distance. Peroform krustkal algorithm on th graph to find the cost of MST of the graph
+    more detailed on Krustal Algorithm: sort the edge in an asenconding order. Ineach iteration, we add lowest cost edge to the tree if addition of egde will not form a cycle in the tree.
+    In the edge class, we store two endpoints and the weight of the edge, we are using vertices idnex in the points array.
+    indices can effectively represnet the vertices espically when vertex has two attributes x-value and y-value
+
+    1615 Maximal Network Rank 
+    The prolem is asking for the maximum number of edges of any pairs of node in the graph
+    Initializtion: graph represetation: each node is mapped to a set of adjacent nodes. Using HashSet is more efficinent for check if any node is connected another node.
+    Convert the edge list to adjacency list 
+    iterate over every pair of nodes, update the golbal maximum 
+    if(two nodes share a common edge) the maximum network-1
+
+    class DijkstraAlgorithm {
+
+        public static int[] dijkstra(int V, List<List<int[]>> adj, int src) {
+            // V is the number of vertices
+            // adj is the adjacency list where adj.get(i) contains all edges from i as pairs (neighbor, weight)
+            // src is the source vertex from which to find the shortest paths to all other vertices
+
+            int[] dist = new int[V]; // Array to hold the shortest distance from src to i
+            Arrays.fill(dist, Integer.MAX_VALUE); // Initialize distances to infinity
+            dist[src] = 0; // Distance to self is 0
+
+            // Min-priority queue, with a comparator to sort by the distance
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+            pq.add(new int[]{src, 0}); // Add source node to the priority queue
+
+            while (!pq.isEmpty()) {
+                int[] current = pq.poll(); // Get the vertex with the smallest distance
+                int currentNode = current[0];
+                int currentDist = current[1];
+
+                if (currentDist > dist[currentNode]) {
+                    continue; // If we have found a better path before, ignore this one
+                }
+
+                // Look at all the neighbors of the current node
+                for (int[] edge : adj.get(currentNode)) {
+                    int next = edge[0]; // The adjacent node
+                    int nextDist = edge[1]; // Weight of the edge to next node
+
+                    // If a shorter path to next is found
+                    if (dist[currentNode] + nextDist < dist[next]) {
+                        dist[next] = dist[currentNode] + nextDist; // Update the distance to next
+                        pq.offer(new int[]{next, dist[next]}); // Add the next node to the queue with the updated distance
+                    }
+                }
+            }
+
+            return dist; // The distances from src to all other nodes
+        }
+        
+1976 Numbers of Ways to Arrive Destination 
+    Objective: The problem is asking for the number of shortest path to a target node.
+    Approach. Using an variant of Dijkstra Algorithm on the source node where we are not only look for the shortest length to the node but also the number of such length.
+    Initialization: Distance array is to store the minimum distance form the root to each node. all distances should be initialized as 0 expect for node 0  which should 0;
+    Array ways is used to store the number of shortest path to each node. Initially, all ways are set to 0 except for node 0 which should be set to 0 indicating there is one way to reach itself 
+    a graph map is an adjacency list where each node is mapped to a list of int[] which store the target node and the edge length
+
+    Updating adjacency list
+    Iterate over the edge list to update all connections and their weight in the graph 
+    Disjsktra algorithm: uses priorityqueu to explore nodes in the order of its distance to the root in the graph ensuring that the node with shortest path are picked first. 
+    For each node we visit. we will iterate all its neighbors and update their distance and their ways of path based on the flollwing creiteria 
+    1. if the total distance is less than the current minimum. update the nieghbor distance and set the ways as the current node ways.which means the ways to reach the neighbor node with shortest length is same as that reaches the current ndoe
+    2. if the total distance is equal to the current minimum, increment the number of ways to neighbor node by the current node ways,hich represents addition shortest ways to reach neighbor
+
+2101 Denonate the Maximum Bombs
+    Graph Representation: We are going to model this problem as a graph where each center of the bomber represents a node, and edges between vertices are established by the ability of one bomb to trigger another one. 
+    If bomb i can trigger the explosion of bomb2, there is an edge bewtween bomb1 and bomb2.
+    The adjacency list is build by iteration every pairs of bombs in the graph and check if the square distance between them is less than the square of the initial bomb's radius. If so, an edge from i to j will be added to the graph,(node j is added to i's adjacency list_
+
+    Step using dfs to explore all nodes in the graph to see how many bombs are presented in each connected component; For each bomb perform dfs on it to calculate how many bombs it tigger the explosion and store the maximun number 
+
+2115 Find All Possible Recipes from Given Supplies 
+    Observation: Graph Representaion: each node represent a recipe or a ingredient, and each edge(u,w)represents that w is a ingrefient of u.
+    Then we can directly visite a a recipe's ingredient through the edge in the graph. 
+    Objective: the problem is asking for whether each recipe can be made with the ingredient avaible in the supply. If we perform dfs or bfs with the recipe as our root node, if all paths can lead to a leaf node that is in supply set, we can ensure that we can make this recipe
+    If we meet a cycle or reach a leaf node that is not in our supply set, we return false;
+
+    Algorithm: 
+    build the graph(adjacency list) by iterating recipes array and ingrefients list. Esatablish all connection found in the recipe and ingredient list. each edge represenst a require relationship 
+    Initialize a supply map where each recipe or ingredient in the map is mapped to a boolean value that represent if the node is avaiable to us. Initially, we will put all of our supplies with true boolean in the map
+    During the dfsm we will expand out supply map by keep track of what dishes can be made or cannot be made
+    res array is used to store the dish we can made and output 
+    Iterating over the recipe array and perform dfs on each recipe
+    we will check if the dfs method recursively check if all ingredients for a recipe is abavivle. Is involves checking if the ingredient is directly in the supply map or it can be made from other recipe taht can be made
+    if the node can be found in the supply map with  a true  value,we return true indicating the nodes is avaible to us 
+    is node can be found in the supply map but with a false value, we return false;
+    if the new node is not found in the supply map, we need to visite its desendant to find if we have its ingredients. if the dish has no ingredient, we put the dish with a false value in the supply map and return false'
+    if all its deseconds nodes are avaible to use we return ture
+    Detect cycle mechanism, in the case of cicular dependency, we will first register a false value when we are visiting its children nodes, if we meet a node marked as false, it means we are entering to a cycle
+    ret
+    I wil use memorization to avoid reprocessing nodes and handle cycle dependencies. Before diving into its child nodes, a node is temparly marked as false in the supply map . If the we meet a node with false key value in the supply map, the method will break and return false indicating there is a cycle44
+
+    Tolological ordering 
+    We will build a graph where each node represents a recipe or a ingreident, each edge(u->w) represets in order to make w, we need u.
+    Fisrt we build our graph's ajacency list by iteration recipes and their ingredients, add all ingredients of a recipe into its adjacency list.
+    we use a indegree array to keep track of indegree value(the number of incoming egdes) for each recipe which how many pre-indregreient we need for each recipe/
+    We initialize the indegree array by incrementing the indegree valur for each edge we found in the graph 
+    ALSO WE need index map to keep track of each recipe i[position in the recipe array so that for a given String recipe we can find its index in the array efficiently 
+    We will make use a queue to help perform topological sortign becasue of their similar manner. First, we will offer all base ingredient into the queue,
+    For each element polled in the queue which represents tge nodes has been avaible to us, we consider all its neighbor nodes, and decrement the indegree value for each neighbor node.
+    If the indegree reaches 0 indicating, all its required ingredients aviable we offer such nodes to the queue. Once its enqueued,
+    Once, there is no element in the queue, we have determined all avaible recipes which has a 0 indegree. Then iterate over the indegree array and add all courses with indegree value 0 to the res list 
+
+2285 Maximum Total Importance of Roads 
+    the problem is to calculate toal importance of all roads where the importance of a node should be assigned based on the number of cities it connectes
+    The more number of egdes a node has, the more important a node is.
+    First, we are gping to iterate over the edge list and keep track of each node's degree and update in the degree array which stores  the degree for each node we increment the degree count for both cities connected by the road 
+    Then use a priorityQueue to sorting the ndoe in an asending order of its degree. Assign each node with an imporatance which started from one.
+    The priorityqueue ensures taht the node with fewer degree would be polled first. we will assign the importance for each city starting from 1 imcrement for each city 
+    We poll each city from the queue and assign it with a increasign importance 
+    Then we are going to calcaulte the total importance by iterating over the edge list and summing up all cities each road connectes  
+
+2316 Count Unreachable Pairs of Nodes in an Undirected Graph 
+    UnionFind data structure:First initialize a rank array to keep track of the rootRank helps optimizing union operation by attaching a smller tree under a larger one.
+    root is to keep track of the parent node for each root
+    find method is used to find thee root for a given node, using a path compression by making each node on the path directly to the root,improvign efficiency later on 
+    Union is used to merge two sets by attaching the root of sammer set to the root of the larger set. It uses rank to ensures we can identify the size if the tree 
+    isConnected is used to check whether tow nodes belonf to same set
+
+    iterating over the edge connecte two endpoints of each edge. After that each set in UNion find represnet a connected component of the graph 
+    Counting the node in each set by using a map/where the root of each set is the key which is mapped to the the value is the count of the nodes 
+    CALCULATING unconnected paits by iterating over the map by mutltifying the componnet's size by the number of remaining ndoes. After processing each component, we decremnt the remaining by the size of the current componnet size 
+
+2359 Find Closest Node to Given Two Nodes 
+    Since node only have at most one outgoing edge,no matter we perform dfs or bfs will give us the samedistance to each node. Using distance to keep track of the count of edges explored in the path, if we have enter a cycle break 
+
+332 Longest Increasing Path in a Matrix
+    The problem is asking for the longest path in the matrix according to two constrains: 
+        There are only four aviable directions
+        Only move to the cell if that cell's value is larger 
+
+    Initlization 
+        maxStep 2D array with the same as the orginla matrix to keep track of the maxSteps fotfurther movement for each cell 
+        directions array to define 4 possible movement 
+        res to keep track of gobal maximum of increasign parh length
+
+    Algorithm:
+        DFS with memorization 
+            For each cell that has not been computed yet, perform dfs with cell as starting cell 
+        dfs Method 
+            if it reach out of the boundary return 0 
+            if it has been computed for the cell return the value +1
+        Each dfs tree we get we do a bottom up memorization approach where we calcualte the length of the leaf node first and move up to update the maxSteps array 
+        When dfs backtrack to the cell that initiates dfs call, it calulcate the maxLength of 4 brances and update in the maxSteps array 
+
