@@ -205,6 +205,9 @@ export const accessAccount = async (req, res) => {
     try {
         const {resetCode} = jwt.verify(req.body.resetCode, config.JWT_SECRET);
         const user = await User.findOneAndUpdate({resetCode},{resetCode: ""});
+        if (!user) {
+            return res.status(400).json({ error: "Invalid reset code or user not found" });
+        }
         tokenAndUserResponse(req,res,user);
         } catch (error){
         console.log(error);
