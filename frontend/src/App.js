@@ -1,39 +1,42 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
 import Main from "./components/nav/Main";
-import {Toaster}  from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import  AccountActivates from "./pages/auth/AccountActivates";
-import ForgotPassword  from "./pages/auth/ForgotPassword";
+import AccountActivate from "./pages/auth/AccountActivates";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 import AccessAccount from "./pages/auth/AccessAccount";
 import Dashboard from "./pages/user/Dashboard";
-import PrivateRoute from "./components/Routes/PrivateRoute";
-import RentLand from "./pages/user/ad/RentLand";
-import RentHouse from "./pages/user/ad/RentHouse";
-import SellLand from "./pages/user/ad/SellLand";
-import SellHouse from "./pages/user/ad/SellHouse";
 import AdCreate from "./pages/user/ad/AdCreate";
-
-
+import PrivateRoute from "./components/Routes/PrivateRoute";
+import SellHouse from "./pages/user/ad/SellHouse";
+import SellLand from "./pages/user/ad/SellLand";
+import RentHouse from "./pages/user/ad/RentHouse";
+import RentLand from "./pages/user/ad/RentLand";
 
 function App() {
   return (
     <BrowserRouter>
-      
-      <Toaster />
       <AuthProvider>
-       <Main /> 
-       <Routes>
+        <Main />
+        <Toaster />
+        <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/auth/account-activate/:token" element={<AccountActivates />} />
+          <Route
+            path="/auth/account-activate/:token"
+            element={<AccountActivate />}
+          />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-          <Route path="/auth/access-account/:token" element={<AccessAccount />} />
-         
-          
+          <Route
+            path="/auth/access-account/:token"
+            element={<AccessAccount />}
+          />
+
           <Route path="/" element={<PrivateRoute />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="ad/create" element={<AdCreate />} />
