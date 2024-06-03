@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 
+// hashPassword takes a password and returns a promise that resolves to a hashed password
+
 export const hashPassword = async (password) => {
     return new Promise((resolve, reject) => {
         // generate a salt with 12 rounds

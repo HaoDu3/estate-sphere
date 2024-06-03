@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 
 const tokenAndUserResponse = async (req,res,user) => {
     const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-        expiresIn: '1h',
+        expiresIn: '12h',
     });
     const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
         expiresIn: '7d',
@@ -24,6 +24,7 @@ const tokenAndUserResponse = async (req,res,user) => {
         user,
     });
 }
+
 
 export const welcome = (req, res) => {
     res.json({
@@ -114,6 +115,7 @@ export const signup = async (req, res) => {
         })
     }
 }
+
 // user enter the path login and send a POST HTTP request
 // 1. find the user with the email
 // 2. compare the password with the hashed password
@@ -223,15 +225,20 @@ export const accessAccount = async (req, res) => {
 // 3. create a token and a refresh token using jwt.sign
 
 export const refreshToken = async (req, res)=>{
-    try{
-        const {_id } = jwt.verify(req.headers.refresh_token, config.JWT_SECRET);
+    try {
+        const { _id } = jwt.verify(req.headers.refresh_token, config.JWT_SECRET);
         const user = await User.findById(_id);
-        tokenAndUserResponse(req,res,user);
-        }catch(error){
+        if (!user) {
+            return res.json({
+                error: "User not found"
+            })
+        }
+        tokenAndUserResponse(req, res, user);
+    } catch (error) {
         console.log(error);
         return res.json({
-            error: "Refresh token failed"
-        })
+            error: "Refresh token failed. Please login again."
+        });
     }
 }
 

@@ -10,7 +10,7 @@ const router = express.Router();
 // app.get() is a method in express that defines a route for http get requests
 // the first argument is the path of the route
 // the second argument is a callback function that is called when the route is matched
-router.get('/',requireLogin, auth.welcome);
+router.get('/', auth.welcome);
 router.post('/pre-signup',auth.preSignup);
 router.post('/signup',auth.signup);
 router.post('/login',auth.login);
