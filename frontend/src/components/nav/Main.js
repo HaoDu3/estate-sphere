@@ -31,7 +31,7 @@ export default function Main() {
     return (
         <Navbar bg="light" expand="lg" className="justify-content-between">
             <Nav>
-                <Nav.Link as={NavLink} exact to="/">
+                <Nav.Link as={NavLink}  to="/">
                     Home
                 </Nav.Link>
                 <Nav.Link onClick ={handlePostAdClick} className='nav-link pointer'>Post Ad</Nav.Link>
