@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 
 const tokenAndUserResponse = async (req,res,user) => {
     const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-        expiresIn: '12h',
+        expiresIn: '24h',
     });
     const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
         expiresIn: '7d',
@@ -16,7 +16,6 @@ const tokenAndUserResponse = async (req,res,user) => {
     user.resetCode = undefined;
     //user.save();
 
-    console.log(user);
 
     return res.json({
         token,
@@ -227,7 +226,10 @@ export const accessAccount = async (req, res) => {
 export const refreshToken = async (req, res)=>{
     try {
         const { _id } = jwt.verify(req.headers.refresh_token, config.JWT_SECRET);
+        //console.log(_id);
         const user = await User.findById(_id);
+        //console.log(user);
+
         if (!user) {
             return res.json({
                 error: "User not found"

@@ -112,3 +112,41 @@ export const create = async (req, res) => {
     console.log(err);
   }
 };
+
+export const ads = async (req, res) => {
+  try{
+    const adsForSell = await Ad.find({action: "Sell"}).select("-location -googleMap -photo.Key -photo.key -photo.ETag").sort({createdAt: -1}).limit(12)
+    const adsForRent = await Ad.find({action: "Rent"}).select("-location -googleMap -photo.Key -photo.key -photo.ETag").sort({createdAt: -1}).limit(12)
+    res.json({adsForSell, adsForRent});
+  }catch(err){
+    console.log(err);
+    res.json({error: "Something went wrong. Try again."});
+  }
+};
+export const read = async (req, res) => {
+  try {
+    const ad = await Ad.findOne({ slug: req.params.slug }).populate(
+      "postedBy",
+      "name username email phone company photo.Location"
+    );
+    if(!ad) return res.json({error: "Ad not found"});
+
+    // related
+    const related = await Ad.find({
+      _id: { $ne: ad._id },
+      action: ad.action,
+      type: ad.type,
+      address: {
+        $regex: ad.googleMap[0].city,
+        $options: "i",
+      },
+    })
+      .limit(3)
+      .select("-photos.Key -photos.key -photos.ETag -photos.Bucket -googleMap");
+
+    
+  res.json({ ad, related });
+  } catch (err) {
+    console.log(err);
+  }
+};

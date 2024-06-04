@@ -28,6 +28,13 @@ app.use(cors());
 // use authRoutes for any route that starts with /api
 app.use('/api', authRoutes);
 app.use('/api', adRoute);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+app.use((req, res, next) => {
+    res.status(404).send('404 - Not Found');
+});
 
 
 
