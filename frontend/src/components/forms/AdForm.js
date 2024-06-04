@@ -74,7 +74,7 @@ export default function AdForm({ action, type }) {
         />
       </div>
 
-          {type === "house"?(
+          {type === "House"?(
             <>
       <input
         type="number"
