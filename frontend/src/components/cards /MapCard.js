@@ -15,7 +15,7 @@ export default function MapCard({ ad }) {
     return (
       <div style={{ width: "100%", height: "350px" }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyDwiJiZcVl8SA_vvX_TkTkkuLza1UC3trk' }}
+          bootstrapURLKeys={{ key: {GOOGLE_MAP_KEY }}
           defaultCenter={defaultProps.center}
           defaultZoom={defaultProps.zoom}
         >
