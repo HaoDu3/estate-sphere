@@ -1,9 +1,9 @@
 export default function Footer(){
 
     return (
-        <footer className="footer bg-dark text-white">
+        <div className="footer bg-dark text-white border">
             <h4 >EstateSphere -Buy Sell or Rent Properties</h4>
-            <p className="tail">&copy; {new Date().getFullYear()} EstateSphere</p>
-        </footer>
+            <p className="leading">&copy; {new Date().getFullYear()} EstateSphere</p>
+        </div>
     )
 }

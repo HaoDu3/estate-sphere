@@ -35,7 +35,7 @@ export default function Login() {
   }
   return (
     <div>
-      <h1 className="display-1 bg-primary text-light p-5">Forgot Password</h1>
+      <h1 className="display-6 bg-success text-light p-3">Forgot Password</h1>
       <div
         className="container"
       >

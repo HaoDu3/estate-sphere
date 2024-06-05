@@ -32,7 +32,7 @@ export default function AccountActivate() {
 
     console.log (token);
     return (
-      <div className="display-1 d-flex justify-content-center align-items-center-vh-100">
+      <div className="display-6 bg-success text-light p-3">
         Please Wait...
         </div>
     );

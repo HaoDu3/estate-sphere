@@ -91,7 +91,7 @@ export default function AdView() {
           <div className="col-lg-8 offset-lg-2 mt-3">
             <MapCard ad={ad} />
             <br />
-            <h1> {ad?.type} in {ad?.address} for {ad?.action} &{ad?.price}</h1>
+            <h1> {ad?.address} for {ad?.action} ${ad?.price}</h1>
             <AdFeatures ad={ad} />
 
             <hr />

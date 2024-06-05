@@ -38,7 +38,7 @@ export default function AccessAccount() {
 
   return (
     <div
-      className="display-1 d-flex justify-content-center align-items-center vh-100"
+      className="display-6 bg-success text-light p-3"
       style={{ marginTop: "-5%" }}
     >
       Please wait...
