@@ -6,8 +6,11 @@ import Logo from "../logo.svg";
 import AdFeatures from "../components/cards /AdFeatures";
 import { formatNumber } from "../helpers/ad";
 import dayjs from "dayjs";
-
+import LikeUnlike from "../components/misc/LikeUnlike";
+import MapCard from "../components/cards /MapCard";
 import relativeTime from "dayjs/plugin/relativeTime";
+import HTMLRenderer from 'react-html-renderer'
+import AdCard from "../components/cards /AdCard";
 
 dayjs.extend(relativeTime);
 
@@ -61,9 +64,12 @@ export default function AdView() {
       <div className="container-fluid">
         <div className="row mt-2">
           <div className="col-lg-4">
-            <button className="btn btn-primary disabled mt-2">
-              {ad.type} for {ad.action}
-            </button>
+            <div className="d-flex justify-content-between">
+              <button className="btn btn-primary disabled mt-2">
+                {ad.type} for {ad.action}
+              </button>
+              <LikeUnlike ad={ad} />
+            </div>
             <div className="mt-4 mb-4">
               {ad?.sold ? "❌ Off market" : "✅ In market"}
             </div>
@@ -75,11 +81,34 @@ export default function AdView() {
 
           <div className="col-lg-8">
             <ImageGallery photos={generatePhotosArray(ad?.photos)} />
+
           </div>
         </div>
       </div>
 
-      <pre>{JSON.stringify({ ad, related }, null, 4)}</pre>
+      <div className="container ,t-5">
+        <div className="row">
+          <div className="col-lg-8 offset-lg-2 mt-3">
+            <MapCard ad={ad} />
+            <br />
+            <h1> {ad?.type} in {ad?.address} for {ad?.action} &{ad?.price}</h1>
+            <AdFeatures ad={ad} />
+
+            <hr />
+            <h3 className="fw-bold"> {ad?.title}</h3>
+            <HTMLRenderer html={ad?.description?.replaceAll(".", "<br/><br/>")} />
+          </div>
+        </div>
+      </div>
+
+      <div className="container-fluid">
+        <h4 className="text-center mt-5 justify-content-center">Related {ad?.type}s</h4>
+        <div className="row">
+          {related?.map((r) => (
+            <AdCard ad={r} />
+          ))}
+        </div>
+      </div>
     </>
   );
 }
