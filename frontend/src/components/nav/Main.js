@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import {useAuth} from '../../context/auth';
 import {useNavigate} from 'react-router-dom';
-
+import Footer from './Footer';
 
 
 export default function Main() {
