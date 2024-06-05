@@ -1,4 +1,4 @@
 .env
 node_modules
 ./config
-./componets/cards/MapCard.js
+./src/components/cards/MapCard.js
