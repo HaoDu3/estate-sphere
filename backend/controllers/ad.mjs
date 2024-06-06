@@ -116,13 +116,13 @@ export const create = async (req, res) => {
 };
 
 export const ads = async (req, res) => {
-  try{
-    const adsForSell = await Ad.find({action: "Sell"}).select("-location -googleMap -photo.Key -photo.key -photo.ETag").sort({createdAt: -1}).limit(12)
-    const adsForRent = await Ad.find({action: "Rent"}).select("-location -googleMap -photo.Key -photo.key -photo.ETag").sort({createdAt: -1}).limit(12)
-    res.json({adsForSell, adsForRent});
-  }catch(err){
+  try {
+    const adsForSell = await Ad.find({ action: "Sell" }).select("-location -googleMap -photo.Key -photo.key -photo.ETag").sort({ createdAt: -1 }).limit(12)
+    const adsForRent = await Ad.find({ action: "Rent" }).select("-location -googleMap -photo.Key -photo.key -photo.ETag").sort({ createdAt: -1 }).limit(12)
+    res.json({ adsForSell, adsForRent });
+  } catch (err) {
     console.log(err);
-    res.json({error: "Something went wrong. Try again."});
+    res.json({ error: "Something went wrong. Try again." });
   }
 };
 export const read = async (req, res) => {
@@ -131,7 +131,7 @@ export const read = async (req, res) => {
       "postedBy",
       "name username email phone company photo.Location"
     );
-    if(!ad) return res.json({error: "Ad not found"});
+    if (!ad) return res.json({ error: "Ad not found" });
 
     // related
     const related = await Ad.find({
@@ -146,24 +146,24 @@ export const read = async (req, res) => {
       .limit(3)
       .select("-photos.Key -photos.key -photos.ETag -photos.Bucket -googleMap");
 
-    
-  res.json({ ad, related });
+
+    res.json({ ad, related });
   } catch (err) {
     console.log(err);
   }
 };
 
-export const contactSeller = async (req, res)=>{
-  try{
-      const {name, email, message, phone, adId} = req.body;
-      // find the ad using postedBy and send email
-      const ad = await Ad.findById(adId).populate("postedBy", "name email");
-      const user = await User.findByIdAndUpdate(req.user._id, {$addToSet: {requiredProperties: adId}});
-      if(!user) return res.json({error: "User not found"});
-      else{
-        config.AWS_SES.sendEmail(emailTemplate(
-          ad.postedBy.email,
-          `
+export const contactSeller = async (req, res) => {
+  try {
+    const { name, email, message, phone, adId } = req.body;
+    // find the ad using postedBy and send email
+    const ad = await Ad.findById(adId).populate("postedBy", "name email");
+    const user = await User.findByIdAndUpdate(req.user._id, { $addToSet: { requiredProperties: adId } });
+    if (!user) return res.json({ error: "User not found" });
+    else {
+      config.AWS_SES.sendEmail(emailTemplate(
+        ad.postedBy.email,
+        `
     <p>You have received a new customer Inquiry.</p>
     <h4> Customer Details</h4>
     <p>Name: ${name}</p>
@@ -172,20 +172,121 @@ export const contactSeller = async (req, res)=>{
     <p>Message: ${message}</p>
     <a href="${config.CLIENT_URL}/ad/${ad.slug}"> ${ad.type} in ${ad.address} for ${ad.action} ${ad.price} </a>
     `,
-          email,
-          "New Inquiry on your ad"
+        email,
+        "New Inquiry on your ad"
       ), (err, data) => {
-          if (err) {
-              console.log(err);
-              return res.json({ ok: false })
-          } else {
-              console.log(data);
-              return res.json({ ok: true})
-          }
+        if (err) {
+          console.log(err);
+          return res.json({ ok: false })
+        } else {
+          console.log(data);
+          return res.json({ ok: true })
+        }
       });
-      }
-  }catch(err){
+    }
+  } catch (err) {
     console.log(err);
-    res.json({error: "Something went wrong. Try again."});
+    res.json({ error: "Something went wrong. Try again." });
   }
 }
+
+
+export const addToWishlist = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { wishlist: req.body.adId },
+      },
+      { new: true }
+    );
+
+    const { password, resetCode, ...rest } = user._doc;
+
+    // console.log("added to wishlist => ", rest);
+
+    res.json(rest);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const removeFromWishlist = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { wishlist: req.params.adId },
+      },
+      { new: true }
+    );
+
+    const { password, resetCode, ...rest } = user._doc;
+    // console.log("remove from wishlist => ", rest);
+
+    res.json(rest);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+export const userAds = async (req, res) => {
+  try {
+    const perPage = 3;
+    const page = req.params.page || 1;
+    const total = await Ad.find({ postedBy: req.user._id });
+    const ads = await Ad.find({ postedBy: req.user._id }).sort({ createdAt: -1 }).skip((page - 1) * perPage).limit(perPage).populate("postedBy", "name email phone company").skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 });
+    res.json({ ads, totals: total.length });
+  } catch (err) {
+    console.log(err);
+    res.json({ error: "Something went wrong. Try again." });
+  }
+}
+
+
+export const update = async (req, res) => {
+  try {
+    const { photos, price, type, address, description } = req.body;
+
+    const ad = await Ad.findOne({ slug: req.params.slug });
+
+  
+  
+
+   
+      // validation
+      if (!photos.length) {
+        return res.json({ error: "Photos are required" });
+      }
+      if (!price) {
+        return res.json({ error: "Price is required" });
+      }
+      if (!type) {
+        return res.json({ error: "Is property hour or land?" });
+      }
+      if (!address) {
+        return res.json({ error: "Address is required" });
+      }
+      if (!description) {
+        return res.json({ error: "Description are required" });
+      }
+
+      const geo = await config.GOOGLE_GEOCODER.geocode(address);
+
+      ad.set({
+        ...req.body,
+        slug: ad.slug,
+        location: {
+          type: "Point",
+          coordinates: [geo?.[0]?.longitude, geo?.[0]?.latitude],
+        },
+      });
+      await ad.save();
+
+      res.json({ ok: true });
+
+  } catch (err) {
+    console.log(err);
+  }
+};

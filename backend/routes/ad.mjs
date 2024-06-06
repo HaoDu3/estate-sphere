@@ -12,4 +12,10 @@ router.get('/adsList',ad.ads);
 router.get('/ad/:slug',ad.read);
 router.post('/contact-seller',requireLogin, ad.contactSeller);
 
+
+router.get('/user-ads/:pages',requireLogin, ad.userAds); 
+router.post("/wishlist", requireLogin, ad.addToWishlist);
+router.delete("/wishlist/:adId", requireLogin, ad.removeFromWishlist);
+router.put('/ad/:slug',requireLogin, ad.update);
+
 export default router;

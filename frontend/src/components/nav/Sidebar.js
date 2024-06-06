@@ -10,6 +10,7 @@ export default function Sidebar() {
   <NavLink className="nav-link" to="/ad/create">Create Ad</NavLink>
   <NavLink className="nav-link" to="/user/profile">User Profile</NavLink>
   <NavLink className="nav-link" to="/user/settings">Settings</NavLink>
+  <NavLink className="nav-link" to="/">Login</NavLink>
 </nav>
 
     );

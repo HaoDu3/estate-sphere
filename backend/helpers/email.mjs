@@ -32,7 +32,7 @@ export const emailTemplate = (email, content, replyTo, subject) => {
         Subject: {
           // Subject of the email
           Charset: "UTF-8",
-          Data: "Welcome to EstateSphere",
+          Data: "EstateSphere",
         },
       },
     };

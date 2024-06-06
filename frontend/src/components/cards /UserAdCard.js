@@ -4,14 +4,14 @@ import { BiArea } from "react-icons/bi";
 import { Badge } from "antd";
 import { Link } from "react-router-dom";
 
-export default function AdCard({ ad }) {
+export default function UserAdCard({ ad }) {
   function formatNumber(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   return (
-    <div className="col-lg-4 p-4 gx-4 gy-4" key={ad._id}>
-      <Link to={`/ad/${ad.slug}`}>
+    <div className="col-lg-4 p-4 gx-4 gy-4" key="ad._id">
+      <Link to={`/user/ad/${ad.slug}`}>
         <Badge.Ribbon
           text={`${ad?.type} for ${ad?.action}`}
           color={`${ad?.action === "Sell" ? "blue" : "red"}`}
