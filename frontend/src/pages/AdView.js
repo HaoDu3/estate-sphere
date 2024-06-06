@@ -11,7 +11,7 @@ import MapCard from "../components/cards /MapCard";
 import relativeTime from "dayjs/plugin/relativeTime";
 import HTMLRenderer from 'react-html-renderer'
 import AdCard from "../components/cards /AdCard";
-
+import ContactSeller from "../components/forms/ContactSeller";
 dayjs.extend(relativeTime);
 
 export default function AdView() {
@@ -23,7 +23,7 @@ export default function AdView() {
 
   useEffect(() => {
     if (params?.slug) fetchAd();
-  }, [params?.slug]);
+  }, [params?.slug, params?.slug?.length]);
 
   const fetchAd = async () => {
     try {
@@ -99,6 +99,9 @@ export default function AdView() {
             <HTMLRenderer html={ad?.description?.replaceAll(".", "<br/><br/>")} />
           </div>
         </div>
+      </div>
+      <div className="container mt-5">
+        <ContactSeller ad={ad} />
       </div>
 
       <div className="container-fluid">

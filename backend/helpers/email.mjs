@@ -21,7 +21,7 @@ export const emailTemplate = (email, content, replyTo, subject) => {
             Data: `
                   <html>
                       <div style="${style}">
-                          <h1>Welcome to Realist App</h1>
+                          <h1>View a Message from EstateSphere</h1>
                           ${content}
                           <p>&copy; ${new Date().getFullYear()}</p>
                       </div>

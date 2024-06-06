@@ -1,8 +1,10 @@
-import * as config from "../config.mjs";
+
 import { nanoid } from "nanoid";
 import slugify from "slugify";
 import Ad from "../models/ad.mjs";
-import User from "../models/user.mjs";
+import User from "../models/user.mjs"
+import { emailTemplate } from "../helpers/email.mjs";
+import * as config from "../config.mjs";
 
 export const uploadImage = async (req, res) => {
   try {
@@ -150,3 +152,40 @@ export const read = async (req, res) => {
     console.log(err);
   }
 };
+
+export const contactSeller = async (req, res)=>{
+  try{
+      const {name, email, message, phone, adId} = req.body;
+      // find the ad using postedBy and send email
+      const ad = await Ad.findById(adId).populate("postedBy", "name email");
+      const user = await User.findByIdAndUpdate(req.user._id, {$addToSet: {requiredProperties: adId}});
+      if(!user) return res.json({error: "User not found"});
+      else{
+        config.AWS_SES.sendEmail(emailTemplate(
+          ad.postedBy.email,
+          `
+    <p>You have received a new customer Inquiry.</p>
+    <h4> Customer Details</h4>
+    <p>Name: ${name}</p>
+    <p>Email: ${email}</p>
+    <p>Phone: ${phone}</p>
+    <p>Message: ${message}</p>
+    <a href="${config.CLIENT_URL}/ad/${ad.slug}"> ${ad.type} in ${ad.address} for ${ad.action} ${ad.price} </a>
+    `,
+          email,
+          "New Inquiry on your ad"
+      ), (err, data) => {
+          if (err) {
+              console.log(err);
+              return res.json({ ok: false })
+          } else {
+              console.log(data);
+              return res.json({ ok: true})
+          }
+      });
+      }
+  }catch(err){
+    console.log(err);
+    res.json({error: "Something went wrong. Try again."});
+  }
+}
