@@ -250,7 +250,12 @@ export const update = async (req, res) => {
     const { photos, price, type, address, description } = req.body;
 
     const ad = await Ad.findOne({ slug: req.params.slug });
+    if (!ad) return res.json({ error: "Ad not found" });
 
+   
+    if (ad.postedBy.toString() !== req.user._id.toString()){
+      return res.json({ error: "Unauthorized" });
+    }
   
   
 
