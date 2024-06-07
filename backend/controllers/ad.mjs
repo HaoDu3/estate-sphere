@@ -340,7 +340,7 @@ export const adsForSell = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(24);
 
-    res.json(ads);
+    res.json({ads});
   } catch (err) {
     console.log(err);
   }
@@ -349,12 +349,39 @@ export const adsForSell = async (req, res) => {
 export const adsForRent = async (req, res) => {
   try {
     const ads = await Ad.find({ action: "Rent" })
-      .select("-googleMap -location -photo.Key -photo.key -photo.ETag")
       .sort({ createdAt: -1 })
       .limit(24);
 
-    res.json(ads);
+    res.json({ads});
   } catch (err) {
     console.log(err);
+  }
+};
+
+
+
+export const search = async (req, res) => {
+  try {
+    console.log("req query", req.query);
+    const { action, address, type, priceRange } = req.query;
+
+    const geo = await config.GOOGLE_GEOCODER.geocode(address);
+     console.log("geo => ", geo);
+
+    const ads = await Ad.find({
+      action: action === "Buy" ? "Sell" : "Rent",
+      type,
+      price: {
+        $gte: parseInt(priceRange[0]),
+        $lte: parseInt(priceRange[1]+10000000),
+      },})
+      .limit(24)
+      .sort({ createdAt: -1 })
+      .select(
+        "-photos.key -photos.Key -photos.ETag -photos.Bucket -location -googleMap");
+    console.log(ads.length);
+    res.json(ads);
+  } catch (err) {
+    console.log();
   }
 };

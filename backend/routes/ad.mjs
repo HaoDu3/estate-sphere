@@ -22,5 +22,6 @@ router.get('/wishlist',requireLogin, ad.wishlist);
 router.delete('/ad/:id',requireLogin, ad.remove);
 router.get('/ads-for-sell',ad.adsForSell);
 router.get('/ads-for-rent',ad.adsForRent);
+router.get("/search", ad.search);
 
 export default router;

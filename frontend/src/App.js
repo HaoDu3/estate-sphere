@@ -26,11 +26,15 @@ import Agents from "./pages/Agents";
 import Agent from "./pages/Agent";
 import Buy from "./pages/Buy";
 import Rent from "./pages/Rent";
+import { SearchProvider } from "./context/search";
+import Search from "./pages/Search";
+
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <SearchProvider>
         <Main />
         <Toaster />
         <Routes>
@@ -64,8 +68,10 @@ function App() {
           <Route path="agent/:username" element={<Agent />} />
           <Route path="/buy" element={<Buy />} />
           <Route path="/rent" element={<Rent />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
         <Footer />
+        </SearchProvider>
       </AuthProvider>
     </BrowserRouter>
   );

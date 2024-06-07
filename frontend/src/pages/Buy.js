@@ -30,7 +30,9 @@ export default function Buy() {
       <h1 className="display-1 bg-primary text-light p-5">For Sell</h1>
       <div className="container">
         <div className="row">
-         
+         {ads?.map((ad) => (
+            <AdCard ad={ad} key={ad._id} />
+          ))}
         </div>
       </div>
     </div>
