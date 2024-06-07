@@ -34,6 +34,10 @@ export default function Main() {
                 <Nav.Link as={NavLink}  to="/">
                     Home
                 </Nav.Link>
+                <Nav.Link as={NavLink} aria-current="page" to="/agents"> Agents</Nav.Link>
+                <Nav.Link as={NavLink} to="/buy">Buy</Nav.Link>
+                <Nav.Link as={NavLink} to="/rent">Rent</Nav.Link>
+                
                 <Nav.Link onClick ={handlePostAdClick} className='nav-link pointer'>Post Ad</Nav.Link>
                 {! loggedIn?<>
                 <Nav.Link as={NavLink} to="/login">

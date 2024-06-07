@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ImageGallery from "../components/misc/ImageGallery";
 import Logo from "../logo.svg";
-import AdFeatures from "../components/cards /AdFeatures";
+import AdFeatures from "../components/cards/AdFeatures";
 import { formatNumber } from "../helpers/ad";
 import dayjs from "dayjs";
 import LikeUnlike from "../components/misc/LikeUnlike";
-import MapCard from "../components/cards /MapCard";
+import MapCard from "../components/cards/MapCard";
 import relativeTime from "dayjs/plugin/relativeTime";
 import HTMLRenderer from 'react-html-renderer'
-import AdCard from "../components/cards /AdCard";
+import AdCard from "../components/cards/AdCard";
 import ContactSeller from "../components/forms/ContactSeller";
 dayjs.extend(relativeTime);
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../../components/nav/Sidebar";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
-import UserAdCard from "../../components/cards /UserAdCard";
+import UserAdCard from "../../components/cards/UserAdCard";
 
 export default function Dashboard() {
   // context

@@ -20,6 +20,12 @@ import AdView from "./pages/AdView";
 import Footer from "./components/nav/Footer";
 import Profile from "./pages/user/Profile";
 import AdEdit from "./pages/user/ad/AdEdit";
+import Wishlist from "./pages/user/Wishlist";
+import Enquiries from "./pages/user/Enquiries";
+import Agents from "./pages/Agents";
+import Agent from "./pages/Agent";
+import Buy from "./pages/Buy";
+import Rent from "./pages/Rent";
 
 function App() {
   return (
@@ -40,7 +46,6 @@ function App() {
             path="/auth/access-account/:token"
             element={<AccessAccount />}
           />
-
           <Route path="/" element={<PrivateRoute />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="ad/create" element={<AdCreate />} />
@@ -51,9 +56,14 @@ function App() {
             <Route path="user/profile" element={<Profile />} />
             <Route path="user/settings" element={<Settings />} />
             <Route path="user/ad/:slug" element={<AdEdit />} />
+            <Route path="user/wishlist" element={<Wishlist />} />
+            <Route path="user/enquiries" element={<Enquiries />} />
           </Route>
-
+          <Route path="agents" element={<Agents />} />
           <Route path="ad/:slug" element={<AdView />} />
+          <Route path="agent/:username" element={<Agent />} />
+          <Route path="/buy" element={<Buy />} />
+          <Route path="/rent" element={<Rent />} />
         </Routes>
         <Footer />
       </AuthProvider>

@@ -4,6 +4,7 @@ import { emailTemplate, emailChecker } from '../helpers/email.mjs';
 import { hashPassword, comparePassword } from '../helpers/auth.mjs';
 import User from '../models/user.mjs';
 import { nanoid } from 'nanoid';
+import Ad from '../models/ad.mjs';
 
 const tokenAndUserResponse = async (req,res,user) => {
     const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
@@ -345,3 +346,39 @@ export const updateProfile = async (req,res) =>{
         } 
     }
 }
+
+
+export const agents = async (req, res) => {
+    try {
+      const agents = await User.find({ role: "Seller" }).select(
+        "-password -role -enquiredProperties -wishlist -photo.key -photo.Key -photo.Bucket"
+      );
+      res.json(agents);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  export const agentAdCount = async (req, res) => {
+    try {
+      const ads = await Ad.find({ postedBy: req.params._id }).select("_id");
+      // console.log("ads count => ", ads);
+      res.json(ads);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  export const agent = async (req, res) => {
+    try {
+      const user = await User.findOne({ username: req.params.username }).select(
+        "-password -role -enquiredProperties -wishlist -photo.key -photo.Key -photo.Bucket"
+      );
+      const ads = await Ad.find({ postedBy: user._id }).select(
+        "-photos.key -photos.Key -photos.ETag -photos.Bucket -location -googleMap"
+      );
+      res.json({ user, ads });
+    } catch (err) {
+      console.log(err);
+    }
+  };

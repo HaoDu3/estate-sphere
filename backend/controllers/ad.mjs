@@ -295,3 +295,66 @@ export const update = async (req, res) => {
     console.log(err);
   }
 };
+
+
+export const enquiredProperties = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const ads = await Ad.find({ _id: { $in: user.requiredProperties } });
+    res.json(ads);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+export const wishlist = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate("wishlist");
+    res.json(user.wishlist);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const remove = async (req, res) => {
+  try {
+    const ad = await Ad.findOne(req.params._id);
+    const user = await User.findById(req.user._id);
+    if(ad.postedBy.toString() !== user._id.toString()){
+      return res.json({error: "Unauthorized"})
+    };
+    await Ad.findOneAndDelete(req.params._id);
+    res.json({ok: true});
+  }catch(err){  
+
+    console.log(err);
+    res.json({error: "Something went wrong. Try again."});
+  }
+}
+
+export const adsForSell = async (req, res) => {
+  try {
+    const ads = await Ad.find({ action: "Sell" })
+      .select("-googleMap -location -photo.Key -photo.key -photo.ETag")
+      .sort({ createdAt: -1 })
+      .limit(24);
+
+    res.json(ads);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const adsForRent = async (req, res) => {
+  try {
+    const ads = await Ad.find({ action: "Rent" })
+      .select("-googleMap -location -photo.Key -photo.key -photo.ETag")
+      .sort({ createdAt: -1 })
+      .limit(24);
+
+    res.json(ads);
+  } catch (err) {
+    console.log(err);
+  }
+};

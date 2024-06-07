@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import axios from "axios";
-import AdCard from "../components/cards /AdCard";
+import AdCard from "../components/cards/AdCard";
 
 export default function Home() {
   // context

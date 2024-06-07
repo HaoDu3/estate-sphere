@@ -17,5 +17,10 @@ router.get('/user-ads/:pages',requireLogin, ad.userAds);
 router.post("/wishlist", requireLogin, ad.addToWishlist);
 router.delete("/wishlist/:adId", requireLogin, ad.removeFromWishlist);
 router.put('/ad/:slug',requireLogin, ad.update);
+router.get('/enquiries',requireLogin, ad.enquiredProperties);
+router.get('/wishlist',requireLogin, ad.wishlist);
+router.delete('/ad/:id',requireLogin, ad.remove);
+router.get('/ads-for-sell',ad.adsForSell);
+router.get('/ads-for-rent',ad.adsForRent);
 
 export default router;

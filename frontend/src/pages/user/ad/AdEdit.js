@@ -36,7 +36,7 @@ export default function AdEdit({ action, type }) {
     if (params?.slug) {
       fetchAd();
     }
-  }, [params?.slug]);
+  }, [params?.slug, params?.slug?.length, action, type]);
 
   const fetchAd = async () => {
     try {
@@ -81,6 +81,27 @@ export default function AdEdit({ action, type }) {
       setAd({ ...ad, loading: false });
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      // make API delete request
+      setAd({ ...ad, loading: true });
+
+      const { data } = await axios.delete(`/ad/${ad._id}`);
+      // console.log("ad delete response => ", data);
+      if (data?.error) {
+        toast.error(data.error);
+        setAd({ ...ad, loading: false });
+      } else {
+        toast.success("Ad deleted successfully");
+        setAd({ ...ad, loading: false });
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.log(err);
+      setAd({ ...ad, loading: false });
+    }
+  }
 
   return (
     <div>
@@ -176,12 +197,21 @@ export default function AdEdit({ action, type }) {
           onChange={(e) => setAd({ ...ad, description: e.target.value })}
         />
 
-        <button
+        <div className="d-flex justify-content-between">
+       <button
           onClick={handleClick}
           className={`btn btn-primary mb-5 ${ad.loading ? "disabled" : ""}`}
         >
           {ad.loading ? "Saving..." : "Submit"}
         </button>
+        <button
+          onClick={handleDelete}
+          className={`btn btn-danger mb-5 ms-3 ${ad.loading ? "disabled" : ""}`}  
+        >
+          {ad.loading ? "Deleting..." : "Delete"}
+        </button>
+        </div>
+
 
         {/* <pre>{JSON.stringify(ad, null, 4)}</pre> */}
       </div>
