@@ -30,6 +30,7 @@ import { SearchProvider } from "./context/search";
 import Search from "./pages/Search";
 
 
+
 function App() {
   return (
     <BrowserRouter>

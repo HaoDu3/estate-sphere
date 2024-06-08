@@ -3,11 +3,34 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ThemeProvider, createTheme } from '@mui/material/styles'; // Ensure correct import for ThemeProvider
+
+// Correct the theme configuration
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: 'rgb(239, 156, 102)', // Correct color format
+    },
+    secondary: {
+      main: '#C8CFA0',
+    },
+    // Custom palette values need to be accessed directly via the theme instance in your components
+    third: {
+      main: 'rgb(120, 171, 168)', // Correct color format
+    },
+    fourth: {
+      main: 'rgb(252, 220, 148)', // Correct color format
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>  // Wrap App with ThemeProvider
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );
 
