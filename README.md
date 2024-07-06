@@ -9,10 +9,7 @@ A full-featured real estate platform that provides secure user authentication, d
 - [Features](#features)
 - [Project Structure](#project-structure)
 - [Technologies Used](#technologies-used)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+
 
 ## Installation
 
@@ -72,7 +69,7 @@ A full-featured real estate platform that provides secure user authentication, d
 
 ## Usage
 
-Once the servers are running, you can access the platform via `http://localhost:3000`. Register or log in to start using the features of the application.
+Once the server is running, you can access the platform via `http://localhost:3000`. Register or log in to start using the features of the application.
 
 ## Features
 
@@ -105,3 +102,19 @@ real-estate-platform/
 │   └── package.json
 ├── README.md
 └── package.json
+
+
+## Technologies Used
+Backend:
+    Node.js
+    Express.js
+    MongoDB
+    AWS SES
+    AWS S3
+    Google Geo-location Service
+    Realtor APIs
+Frontend:
+    React.js
+    Material UI
+
+## 
